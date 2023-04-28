@@ -1,7 +1,7 @@
 # Object Detection with PyTorch, Core ML, and Vision on iOS
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/4254623/186172821-8fc8765b-bc86-4c31-ab44-b2e83d5d7646.PNG" align="center" height="500">
+  <img src="https://raw.githubusercontent.com/renzodamgo/ios-ObjectDetection-YOLO/main/results.jpeg" align="center" height="500">
 </p>
 
 ## Introduction
@@ -34,5 +34,5 @@ Navigate to the root of the `ObjectDetection-CoreML` directory and open the proj
 Select an iOS simulator or device on Xcode to run the app. The app will start outputting predictions and the current inference time:
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/4254623/186172821-8fc8765b-bc86-4c31-ab44-b2e83d5d7646.PNG" align="center" height="500">
+  <img src="https://raw.githubusercontent.com/renzodamgo/ios-ObjectDetection-YOLO/main/results.jpeg" align="center" height="500">
 </p>
