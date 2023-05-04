@@ -27,6 +27,19 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     // Vision
     private var requests = [VNRequest]()
     
+    // Audio
+    var player: AVAudioPlayer?
+    var lastPlayTime = Date()
+    let minimumDelay: TimeInterval = 2.0
+    
+    // Detection
+    var lastEyeClosedTime: Date?
+    let eyeClosedDelay: TimeInterval = 1.0
+    var lastYawnTime : Date?
+    
+    
+    
+    
     // Setup
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +49,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         try? setupVision()
         session.startRunning()
     }
-    
+
     func setupCapture() {
         var deviceInput: AVCaptureDeviceInput!
         let videoDevice = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front).devices.first
@@ -118,7 +131,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func setupVision() throws {
-        guard let modelURL = Bundle.main.url(forResource: "yolov8", withExtension: "mlmodelc") else {
+        guard let modelURL = Bundle.main.url(forResource: "train8", withExtension: "mlmodelc") else {
             throw NSError(domain: "ViewController", code: -1, userInfo: [NSLocalizedDescriptionKey: "Model file is missing"])
         }
         
@@ -128,6 +141,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 DispatchQueue.main.async(execute: {
                     if let results = request.results {
                         self.drawResults(results)
+                        
+                        // Call the additional function on another thread
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            self.processResults(results)
+                        }
                     }
                 })
             })
@@ -154,6 +172,89 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
     }
     
+    func processResults(_ results: [Any]) {
+        // Before detection
+        var closedEye:Bool = false
+        // Perform additional processing of the results on another thread
+        for observation in results where observation is VNRecognizedObjectObservation {
+            guard let objectObservation = observation as? VNRecognizedObjectObservation else {
+                continue
+            }
+            
+            // Detection with highest confidence
+            let topLabelObservation = objectObservation.labels[0]
+            
+            // Check if the label is "Eye_Closed" for more than 1 second
+            if topLabelObservation.identifier == "Eye_Closed" {
+                closedEye = true
+                if topLabelObservation.confidence >= 0.8 {
+                    if lastEyeClosedTime == nil {
+                        lastEyeClosedTime = Date()
+                    } else {
+                        let timeSinceEyeClosed = Date().timeIntervalSince(lastEyeClosedTime!)
+                        print(timeSinceEyeClosed)
+                        if timeSinceEyeClosed >= 0.6 {
+                            lastEyeClosedTime = nil
+                            print("sound")
+                            playSound(resourceName: "closed_eyes")
+                        }
+                    }
+                } else {
+                    lastEyeClosedTime = nil
+                }
+            }
+            
+            // Check if the label is "Eye_Closed" for more than 1 second
+            if topLabelObservation.identifier == "Eye_Closed" {
+                closedEye = true
+                if topLabelObservation.confidence >= 0.8 {
+                    if lastEyeClosedTime == nil {
+                        lastEyeClosedTime = Date()
+                    } else {
+                        let timeSinceEyeClosed = Date().timeIntervalSince(lastEyeClosedTime!)
+                        print(timeSinceEyeClosed)
+                        if timeSinceEyeClosed >= 0.6 {
+                            lastEyeClosedTime = nil
+                            print("sound")
+                            playSound(resourceName: "closed_eyes")
+                        }
+                    }
+                } else {
+                    lastEyeClosedTime = nil
+                }
+            }
+            
+            
+            
+        }
+        // After detection
+        if (!closedEye){
+            print("Not closedEye")
+            lastEyeClosedTime = nil
+        }
+    }
+    
+    func playSound(resourceName: String) {
+        let now = Date()
+        let timeSinceLastPlay = now.timeIntervalSince(lastPlayTime)
+
+        // Check if there is no other audio playing and enough time has elapsed since the last play
+        let audioSession = AVAudioSession.sharedInstance()
+        if !audioSession.isOtherAudioPlaying && timeSinceLastPlay >= minimumDelay {
+            guard let path = Bundle.main.path(forResource: resourceName, ofType:"mp3") else {
+                return }
+            let url = URL(fileURLWithPath: path)
+
+            do {
+                player = try AVAudioPlayer(contentsOf: url)
+                player?.play()
+                lastPlayTime = now // Update the last play time to the current time
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     func drawResults(_ results: [Any]) {
         CATransaction.begin()
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
@@ -169,7 +270,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             
             // Rotate the bounding box into screen orientation
             let boundingBox = CGRect(origin: CGPoint(
-                x:1.0-objectObservation.boundingBox.origin.y-objectObservation.boundingBox.size.height,
+                x:1.0 - objectObservation.boundingBox.origin.y-objectObservation.boundingBox.size.height,
                 y:1.0 - objectObservation.boundingBox.size.width - objectObservation.boundingBox.origin.x ), size: CGSize(width:objectObservation.boundingBox.size.height,height:objectObservation.boundingBox.size.width))
             
             

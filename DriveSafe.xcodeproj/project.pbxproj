@@ -7,27 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2D1E915A29D501E100FF054B /* yolov5n.pt in Resources */ = {isa = PBXBuildFile; fileRef = 2D1E915929D501E100FF054B /* yolov5n.pt */; };
-		2D1E915C29D501EF00FF054B /* yolov5n.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2D1E915B29D501EF00FF054B /* yolov5n.mlmodel */; };
-		2D7F786029F6060C00DC9E4C /* test.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2D7F785F29F6060C00DC9E4C /* test.mlmodel */; };
-		2D7F786229F63B1100DC9E4C /* best.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2D7F786129F63B1100DC9E4C /* best.mlmodel */; };
-		2D7F786429F63C5600DC9E4C /* yolov8.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2D7F786329F63C5600DC9E4C /* yolov8.mlmodel */; };
+		2D99EEE42A0429C900C7DD0A /* yawn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D99EEE32A0429C900C7DD0A /* yawn.mp3 */; };
+		2D99EEE62A0429CE00C7DD0A /* closed_eyes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D99EEE52A0429CE00C7DD0A /* closed_eyes.mp3 */; };
+		2DC2F0BC2A03222400190B62 /* train8.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2DC2F0BB2A03222400190B62 /* train8.mlmodel */; };
+		2DC2F0BE2A0325A700190B62 /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DC2F0BD2A0325A700190B62 /* alarm.mp3 */; };
+		2DC2F0C02A03291900190B62 /* alarm2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DC2F0BF2A03291900190B62 /* alarm2.mp3 */; };
 		E956E0C428AB7926005A1871 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E956E0C328AB7926005A1871 /* AppDelegate.swift */; };
 		E956E0C628AB7926005A1871 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E956E0C528AB7926005A1871 /* SceneDelegate.swift */; };
 		E956E0C828AB7926005A1871 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E956E0C728AB7926005A1871 /* ViewController.swift */; };
 		E956E0CB28AB7926005A1871 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E956E0C928AB7926005A1871 /* Main.storyboard */; };
 		E956E0CD28AB7928005A1871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E956E0CC28AB7928005A1871 /* Assets.xcassets */; };
 		E956E0D028AB7928005A1871 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E956E0CE28AB7928005A1871 /* LaunchScreen.storyboard */; };
-		E956E0DA28AB86BF005A1871 /* yolov5n.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E956E0D928AB86BF005A1871 /* yolov5n.mlmodel */; };
 		E956E0DC28ACD391005A1871 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E956E0DB28ACD391005A1871 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2D1E915929D501E100FF054B /* yolov5n.pt */ = {isa = PBXFileReference; lastKnownFileType = file; name = yolov5n.pt; path = yolov5/yolov5n.pt; sourceTree = SOURCE_ROOT; };
-		2D1E915B29D501EF00FF054B /* yolov5n.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov5n.mlmodel; sourceTree = "<group>"; };
-		2D7F785F29F6060C00DC9E4C /* test.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = test.mlmodel; sourceTree = "<group>"; };
-		2D7F786129F63B1100DC9E4C /* best.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = best.mlmodel; sourceTree = "<group>"; };
-		2D7F786329F63C5600DC9E4C /* yolov8.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov8.mlmodel; sourceTree = "<group>"; };
+		2D99EEE32A0429C900C7DD0A /* yawn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = yawn.mp3; sourceTree = "<group>"; };
+		2D99EEE52A0429CE00C7DD0A /* closed_eyes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = closed_eyes.mp3; sourceTree = "<group>"; };
+		2DC2F0BB2A03222400190B62 /* train8.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = train8.mlmodel; sourceTree = SOURCE_ROOT; };
+		2DC2F0BD2A0325A700190B62 /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
+		2DC2F0BF2A03291900190B62 /* alarm2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm2.mp3; sourceTree = "<group>"; };
 		E956E0C028AB7926005A1871 /* ObjectDetection-CoreML.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ObjectDetection-CoreML.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E956E0C328AB7926005A1871 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E956E0C528AB7926005A1871 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -36,7 +35,6 @@
 		E956E0CC28AB7928005A1871 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E956E0CF28AB7928005A1871 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E956E0D128AB7928005A1871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E956E0D928AB86BF005A1871 /* yolov5n.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov5n.mlmodel; sourceTree = "<group>"; };
 		E956E0DB28ACD391005A1871 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E956E0DE28ACF6CC005A1871 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,13 +76,12 @@
 				E956E0CC28AB7928005A1871 /* Assets.xcassets */,
 				E956E0CE28AB7928005A1871 /* LaunchScreen.storyboard */,
 				E956E0D128AB7928005A1871 /* Info.plist */,
-				2D7F786129F63B1100DC9E4C /* best.mlmodel */,
-				E956E0D928AB86BF005A1871 /* yolov5n.mlmodel */,
-				2D7F786329F63C5600DC9E4C /* yolov8.mlmodel */,
-				2D7F785F29F6060C00DC9E4C /* test.mlmodel */,
 				E956E0DB28ACD391005A1871 /* Utils.swift */,
-				2D1E915929D501E100FF054B /* yolov5n.pt */,
-				2D1E915B29D501EF00FF054B /* yolov5n.mlmodel */,
+				2DC2F0BB2A03222400190B62 /* train8.mlmodel */,
+				2DC2F0BD2A0325A700190B62 /* alarm.mp3 */,
+				2DC2F0BF2A03291900190B62 /* alarm2.mp3 */,
+				2D99EEE32A0429C900C7DD0A /* yawn.mp3 */,
+				2D99EEE52A0429CE00C7DD0A /* closed_eyes.mp3 */,
 			);
 			path = "ObjectDetection-CoreML";
 			sourceTree = "<group>";
@@ -147,10 +144,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D1E915A29D501E100FF054B /* yolov5n.pt in Resources */,
+				2DC2F0C02A03291900190B62 /* alarm2.mp3 in Resources */,
+				2DC2F0BE2A0325A700190B62 /* alarm.mp3 in Resources */,
 				E956E0D028AB7928005A1871 /* LaunchScreen.storyboard in Resources */,
 				E956E0CD28AB7928005A1871 /* Assets.xcassets in Resources */,
+				2D99EEE62A0429CE00C7DD0A /* closed_eyes.mp3 in Resources */,
 				E956E0CB28AB7926005A1871 /* Main.storyboard in Resources */,
+				2D99EEE42A0429C900C7DD0A /* yawn.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,14 +162,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E956E0DC28ACD391005A1871 /* Utils.swift in Sources */,
-				2D7F786029F6060C00DC9E4C /* test.mlmodel in Sources */,
-				2D7F786229F63B1100DC9E4C /* best.mlmodel in Sources */,
-				2D7F786429F63C5600DC9E4C /* yolov8.mlmodel in Sources */,
+				2DC2F0BC2A03222400190B62 /* train8.mlmodel in Sources */,
 				E956E0C828AB7926005A1871 /* ViewController.swift in Sources */,
 				E956E0C428AB7926005A1871 /* AppDelegate.swift in Sources */,
-				2D1E915C29D501EF00FF054B /* yolov5n.mlmodel in Sources */,
 				E956E0C628AB7926005A1871 /* SceneDelegate.swift in Sources */,
-				E956E0DA28AB86BF005A1871 /* yolov5n.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
