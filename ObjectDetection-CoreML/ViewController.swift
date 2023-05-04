@@ -36,6 +36,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var lastEyeClosedTime: Date?
     let eyeClosedDelay: TimeInterval = 1.0
     var lastYawnTime : Date?
+    var yawnTimes = 0
+    var isYawning:Bool = false
     
     
     
@@ -175,6 +177,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     func processResults(_ results: [Any]) {
         // Before detection
         var closedEye:Bool = false
+        
+        var yawnDetected:Bool = false
         // Perform additional processing of the results on another thread
         for observation in results where observation is VNRecognizedObjectObservation {
             guard let objectObservation = observation as? VNRecognizedObjectObservation else {
@@ -192,10 +196,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                         lastEyeClosedTime = Date()
                     } else {
                         let timeSinceEyeClosed = Date().timeIntervalSince(lastEyeClosedTime!)
-                        print(timeSinceEyeClosed)
+//                        print(timeSinceEyeClosed)
                         if timeSinceEyeClosed >= 0.6 {
                             lastEyeClosedTime = nil
-                            print("sound")
+//                            print("sound")
                             playSound(resourceName: "closed_eyes")
                         }
                     }
@@ -205,22 +209,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             }
             
             // Check if the label is "Eye_Closed" for more than 1 second
-            if topLabelObservation.identifier == "Eye_Closed" {
-                closedEye = true
+            if topLabelObservation.identifier == "Mouth_Yawning" {
+                
                 if topLabelObservation.confidence >= 0.8 {
-                    if lastEyeClosedTime == nil {
-                        lastEyeClosedTime = Date()
-                    } else {
-                        let timeSinceEyeClosed = Date().timeIntervalSince(lastEyeClosedTime!)
-                        print(timeSinceEyeClosed)
-                        if timeSinceEyeClosed >= 0.6 {
-                            lastEyeClosedTime = nil
-                            print("sound")
-                            playSound(resourceName: "closed_eyes")
-                        }
+                    yawnDetected = true
+                    if isYawning == false {
+                        isYawning = true
+                        yawnTimes = yawnTimes + 1
+                        print(yawnTimes)
                     }
-                } else {
-                    lastEyeClosedTime = nil
                 }
             }
             
@@ -229,8 +226,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         // After detection
         if (!closedEye){
-            print("Not closedEye")
+//            print("Not closedEye")
             lastEyeClosedTime = nil
+        }
+        
+        if (!yawnDetected){
+            isYawning = false
         }
     }
     
