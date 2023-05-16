@@ -211,18 +211,30 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             // Check if the label is "Eye_Closed" for more than 1 second
             if topLabelObservation.identifier == "Mouth_Yawning" {
                 
+                yawnDetected = true
                 if topLabelObservation.confidence >= 0.8 {
-                    yawnDetected = true
-                    if isYawning == false {
-                        isYawning = true
-                        yawnTimes = yawnTimes + 1
-                        print(yawnTimes)
+                    
+                    if lastYawnTime == nil {
+                        lastYawnTime = Date()
+                    } else {
+                        let timeSinceYawn = Date().timeIntervalSince(lastYawnTime!)
+                        print(timeSinceYawn)
+                        if timeSinceYawn >= 1 && isYawning == false {
+                            isYawning = true
+                            lastYawnTime = nil
+                            print("yawnDetected")
+                            
+                            yawnTimes = yawnTimes + 1
+                            print(yawnTimes)
+                        }
                     }
+                } else {
+                    lastYawnTime = nil
+                    
                 }
+                
+                
             }
-            
-            
-            
         }
         // After detection
         if (!closedEye){
@@ -231,7 +243,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         
         if (!yawnDetected){
+            lastYawnTime = nil
             isYawning = false
+        }
+        
+        if yawnTimes % 3 == 0 && yawnTimes != 0 {
+            playSound(resourceName: "yawn")
+            yawnTimes = yawnTimes + 1
         }
     }
     

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "D916ACA0-FEB2-4BB5-BC3A-3D416B5D809C"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F022829C-1502-4EDD-B1D8-278FA95493CE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ObjectDetection-CoreML/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "playSound(resourceName:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1B81BD26-7621-4BE9-9202-281461EAA948"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ObjectDetection-CoreML/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "263"
+            endingLineNumber = "263"
+            landmarkName = "playSound(resourceName:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1B81BD26-7621-4BE9-9202-281461EAA948 - b8911fc04965d7e2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ObjectDetection_CoreML.ViewController.playSound(resourceName: Swift.String) -&gt; ()"
+                  moduleName = "ObjectDetection-CoreML"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Renzo/Projects/Drivesafe/ObjectDetection-CoreML/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "247"
+                  endingLineNumber = "247"
+                  offsetFromSymbolStart = "1664">
+               </Location>
+               <Location
+                  uuid = "1B81BD26-7621-4BE9-9202-281461EAA948 - b8911fc04965d7e2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ObjectDetection_CoreML.ViewController.playSound(resourceName: Swift.String) -&gt; ()"
+                  moduleName = "ObjectDetection-CoreML"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Renzo/Projects/Drivesafe/ObjectDetection-CoreML/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "247"
+                  endingLineNumber = "247"
+                  offsetFromSymbolStart = "724">
+               </Location>
+               <Location
+                  uuid = "1B81BD26-7621-4BE9-9202-281461EAA948 - b8911fc04965d7e2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ObjectDetection_CoreML.ViewController.playSound(resourceName: Swift.String) -&gt; ()"
+                  moduleName = "ObjectDetection-CoreML"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Renzo/Projects/Drivesafe/ObjectDetection-CoreML/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "247"
+                  endingLineNumber = "247"
+                  offsetFromSymbolStart = "1044">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "896A7F40-16FD-45E6-9B3B-22540D158045"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ObjectDetection-CoreML/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
+            landmarkName = "playSound(resourceName:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
