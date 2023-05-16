@@ -8,8 +8,24 @@
 import UIKit
 import AVFoundation
 import Vision
+import CoreData
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        events = defaults.array(forKey: "events") as? [[String: Any]] ?? []
+        return events.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = events[indexPath.row]["name"] as? String
+        return cell
+    }
+    
+    var lastNotFacingFrontTime: Date?
+    
+    let defaults = UserDefaults.standard
+    var events = [[String: Any]]()
     
     // Capture
     var bufferSize: CGSize = .zero
@@ -18,6 +34,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     // UI/Layers
     @IBOutlet weak var previewView: UIView!
+    @IBOutlet weak var table_data: UITableView!
     var rootLayer: CALayer! = nil
     private var previewLayer: AVCaptureVideoPreviewLayer! = nil
     private var detectionLayer: CALayer! = nil
@@ -45,9 +62,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     // Setup
     override func viewDidLoad() {
         super.viewDidLoad()
+        table_data.dataSource = self
         setupCapture()
         setupOutput()
         setupLayers()
+        
+        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+                UserDefaults.standard.synchronize()
+        events = defaults.array(forKey: "events") as? [[String: Any]] ?? []
         try? setupVision()
         session.startRunning()
     }
@@ -106,6 +128,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         rootLayer = previewView.layer
         previewLayer.frame = rootLayer.bounds
         rootLayer.addSublayer(previewLayer)
+        previewView.addSubview(table_data)
+        previewView.bringSubviewToFront(table_data)
+        table_data.frame = CGRect(x: 0, y: 0, width: previewView.frame.width, height: 200)
         
         inferenceTimeBounds = CGRect(x: rootLayer.frame.midX-95, y: rootLayer.frame.maxY-70, width: 200, height: 17)
         
@@ -188,6 +213,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             // Detection with highest confidence
             let topLabelObservation = objectObservation.labels[0]
             
+            if topLabelObservation.identifier != "Facing_Front" && lastNotFacingFrontTime == nil{
+                lastNotFacingFrontTime = Date()
+            }
+            
+            if topLabelObservation.identifier == "Facing_Front" {
+                lastNotFacingFrontTime = nil
+            }
+
+
+            
             // Check if the label is "Eye_Closed" for more than 1 second
             if topLabelObservation.identifier == "Eye_Closed" {
                 closedEye = true
@@ -201,6 +236,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                             lastEyeClosedTime = nil
 //                            print("sound")
                             playSound(resourceName: "closed_eyes")
+                            logEvent(eventName: "Eyes closed")
+                            print(timeSinceEyeClosed)
                         }
                     }
                 } else {
@@ -222,10 +259,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                         if timeSinceYawn >= 1 && isYawning == false {
                             isYawning = true
                             lastYawnTime = nil
-                            print("yawnDetected")
-                            
                             yawnTimes = yawnTimes + 1
-                            print(yawnTimes)
                         }
                     }
                 } else {
@@ -249,7 +283,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         if yawnTimes % 3 == 0 && yawnTimes != 0 {
             playSound(resourceName: "yawn")
-            yawnTimes = yawnTimes + 1
+            yawnTimes = 0
+            lastYawnTime = nil
+            logEvent(eventName: "Yawn")
+            
+        }
+        
+        if let lastTime = lastNotFacingFrontTime, Date().timeIntervalSince(lastTime) >= 2 {
+            playSound(resourceName: "Not Facing Front")
+            logEvent(eventName: "Not Facing Front")
+            lastNotFacingFrontTime = nil
         }
     }
     
@@ -318,6 +361,38 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         previewLayer.removeFromSuperlayer()
         previewLayer = nil
     }
+    
+    func logEvent(eventName: String) {
+        DispatchQueue.main.async {
+            // Create a reference to the managed object context
+            let defaults = UserDefaults.standard
+            
+            var events = defaults.array(forKey: "events") as? [[String: Any]] ?? []
+            
+            let currentDate = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm:ss"
+            let dateString = formatter.string(from: currentDate)
+            print("Detected '\(eventName)' at \(dateString)")
+            
+            let event: [String: Any] = [
+                "name": "\(eventName) at \(dateString)",
+                "date": currentDate
+            ]
+            events.append(event)
+            defaults.set(events, forKey: "events")
+            self.table_data.reloadData()
+            self.scrollToBottom()
+            
+        }
+    }
+    
+    func scrollToBottom() {
+            let lastRow = table_data.numberOfRows(inSection: 0) - 1
+            let indexPath = IndexPath(row: lastRow, section: 0)
+            table_data.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+
     
 }
 
