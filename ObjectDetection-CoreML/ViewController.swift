@@ -290,7 +290,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         
         if let lastTime = lastNotFacingFrontTime, Date().timeIntervalSince(lastTime) >= 2 {
-            playSound(resourceName: "Not Facing Front")
+            playSound(resourceName: "not_facing_front")
             logEvent(eventName: "Not Facing Front")
             lastNotFacingFrontTime = nil
         }
