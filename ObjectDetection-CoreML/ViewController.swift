@@ -56,7 +56,22 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var yawnTimes = 0
     var isYawning:Bool = false
     
-    
+    func createLogFile() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.dateFormat = "yyyy-MM-dd_HH:mm:ss.SSS" // modify the format to your preference
+        
+        guard let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
+            return
+        }
+        let fileName = "\(dateFormatter.string(from: Date())).log"
+        print(fileName)
+        let logFilePath = (documentsDirectory as NSString).appendingPathComponent(fileName)
+        print(logFilePath)
+        
+        freopen(logFilePath.cString(using: String.Encoding.ascii), "a+", stderr)
+    }
+
     
     
     // Setup
@@ -66,6 +81,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         setupCapture()
         setupOutput()
         setupLayers()
+        createLogFile()
+
         
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
                 UserDefaults.standard.synchronize()
@@ -158,7 +175,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func setupVision() throws {
-        guard let modelURL = Bundle.main.url(forResource: "train8", withExtension: "mlmodelc") else {
+        guard let modelURL = Bundle.main.url(forResource: "train12", withExtension: "mlmodelc") else {
             throw NSError(domain: "ViewController", code: -1, userInfo: [NSLocalizedDescriptionKey: "Model file is missing"])
         }
         
@@ -256,7 +273,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     } else {
                         let timeSinceYawn = Date().timeIntervalSince(lastYawnTime!)
                         print(timeSinceYawn)
-                        if timeSinceYawn >= 1 && isYawning == false {
+                        if timeSinceYawn >= 2 && isYawning == false {
                             isYawning = true
                             lastYawnTime = nil
                             yawnTimes = yawnTimes + 1
@@ -281,7 +298,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             isYawning = false
         }
         
-        if yawnTimes % 3 == 0 && yawnTimes != 0 {
+        if yawnTimes != 0 && yawnTimes != 0 {
             playSound(resourceName: "yawn")
             yawnTimes = 0
             lastYawnTime = nil
@@ -364,6 +381,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func logEvent(eventName: String) {
         DispatchQueue.main.async {
+            let dateFormatter = DateFormatter()
+            dateFormatter.timeZone = TimeZone.current
+            dateFormatter.dateFormat = "yyyy-MM-dd_HH:mm:ss.SSS" // modify the format to your preference
             // Create a reference to the managed object context
             let defaults = UserDefaults.standard
             
@@ -379,11 +399,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 "name": "\(eventName) at \(dateString)",
                 "date": currentDate
             ]
+            NSLog("\(eventName) at \(dateFormatter.string(from: Date()))")
             events.append(event)
             defaults.set(events, forKey: "events")
             self.table_data.reloadData()
             self.scrollToBottom()
             
+        
         }
     }
     

@@ -14,9 +14,9 @@
             filePath = "ObjectDetection-CoreML/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "273"
-            endingLineNumber = "273"
-            landmarkName = "drawResults(_:)"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
+            landmarkName = "processResults(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,8 +30,8 @@
             filePath = "ObjectDetection-CoreML/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
             landmarkName = "processResults(_:)"
             landmarkType = "7">
          </BreakpointContent>
