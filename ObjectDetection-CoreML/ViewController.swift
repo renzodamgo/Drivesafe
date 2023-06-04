@@ -47,6 +47,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     // Audio
     var player: AVAudioPlayer?
     var lastPlayTime = Date()
+    var lastLogTime = Date()
     let minimumDelay: TimeInterval = 2.0
     
     // Detection
@@ -110,7 +111,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             return
         }
         session.addInput(deviceInput)
-        
+
         do {
             try  videoDevice!.lockForConfiguration()
             let dimensions = CMVideoFormatDescriptionGetDimensions((videoDevice?.activeFormat.formatDescription)!)
@@ -175,7 +176,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func setupVision() throws {
-        guard let modelURL = Bundle.main.url(forResource: "train12", withExtension: "mlmodelc") else {
+        guard let modelURL = Bundle.main.url(forResource: "train14", withExtension: "mlmodelc") else {
             throw NSError(domain: "ViewController", code: -1, userInfo: [NSLocalizedDescriptionKey: "Model file is missing"])
         }
         
@@ -331,6 +332,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             } catch let error {
                 print(error.localizedDescription)
             }
+//            logEvent(eventName: resourceName)
         }
     }
     
@@ -381,30 +383,38 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func logEvent(eventName: String) {
         DispatchQueue.main.async {
-            let dateFormatter = DateFormatter()
-            dateFormatter.timeZone = TimeZone.current
-            dateFormatter.dateFormat = "yyyy-MM-dd_HH:mm:ss.SSS" // modify the format to your preference
-            // Create a reference to the managed object context
-            let defaults = UserDefaults.standard
-            
-            var events = defaults.array(forKey: "events") as? [[String: Any]] ?? []
-            
-            let currentDate = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm:ss"
-            let dateString = formatter.string(from: currentDate)
-            print("Detected '\(eventName)' at \(dateString)")
-            
-            let event: [String: Any] = [
-                "name": "\(eventName) at \(dateString)",
-                "date": currentDate
-            ]
-            NSLog("\(eventName) at \(dateFormatter.string(from: Date()))")
-            events.append(event)
-            defaults.set(events, forKey: "events")
-            self.table_data.reloadData()
-            self.scrollToBottom()
-            
+            let now = Date()
+            let timeSinceLastLog = now.timeIntervalSince(self.lastLogTime)
+            print(timeSinceLastLog,self.minimumDelay)
+
+            if timeSinceLastLog >= self.minimumDelay {
+                self.lastLogTime = now
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.timeZone = TimeZone.current
+                dateFormatter.dateFormat = "yyyy-MM-dd_HH:mm:ss.SSS" // modify the format to your preference
+                // Create a reference to the managed object context
+                let defaults = UserDefaults.standard
+                
+                var events = defaults.array(forKey: "events") as? [[String: Any]] ?? []
+                
+                let currentDate = Date()
+                let formatter = DateFormatter()
+                formatter.dateFormat = "HH:mm:ss"
+                let dateString = formatter.string(from: currentDate)
+                print("Detected '\(eventName)' at \(dateString)")
+                
+                let event: [String: Any] = [
+                    "name": "\(eventName) at \(dateString)",
+                    "date": currentDate
+                ]
+                NSLog("\(eventName) at \(dateFormatter.string(from: Date()))")
+                events.append(event)
+                defaults.set(events, forKey: "events")
+                self.table_data.reloadData()
+                self.scrollToBottom()
+                
+            }
         
         }
     }
