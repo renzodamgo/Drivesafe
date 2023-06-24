@@ -22,11 +22,35 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         return cell
     }
     
+    var isDetectionRunning = false
+    var isFacingFront = false
     var lastNotFacingFrontTime: Date?
     
     let defaults = UserDefaults.standard
     var events = [[String: Any]]()
+    @IBAction func startDetection(_ sender: Any) {
+        print("Detection started")
+        
+        //session.startRunning()
+        isDetectionRunning = true
+        popupInfo.isHidden = true
+        inferenceTimeLayer.isHidden = false
+        stopDButton.isEnabled = true
+        startDButton.isEnabled = false
+        
+    }
     
+    @IBAction func stopDetection(_ sender: Any) {
+        print("Detection stopped")
+        isFacingFront = false
+        //session.stopRunning()
+        isDetectionRunning = false
+        popupInfo.isHidden = false
+        detectionLayer.sublayers = nil // Clear previous detections from detectionLayer
+        inferenceTimeLayer.isHidden = true
+        stopDButton.isEnabled = false
+        startDButton.isEnabled = true
+    }
     // Capture
     var bufferSize: CGSize = .zero
     var inferenceTime: CFTimeInterval  = 0;
@@ -56,6 +80,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var lastYawnTime : Date?
     var yawnTimes = 0
     var isYawning:Bool = false
+    var visionModel: VNCoreMLModel?
     
     func createLogFile() {
         let dateFormatter = DateFormatter()
@@ -65,7 +90,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         guard let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
             return
         }
-        let fileName = "\(dateFormatter.string(from: Date())).log"
+        let fileName = "\(dateFormatter.string(from: Date()))benchmark.log"
         print(fileName)
         let logFilePath = (documentsDirectory as NSString).appendingPathComponent(fileName)
         print(logFilePath)
@@ -83,12 +108,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         setupOutput()
         setupLayers()
         createLogFile()
+        stopDButton.isEnabled = false
+        startDButton.isEnabled = false
 
         
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
                 UserDefaults.standard.synchronize()
         events = defaults.array(forKey: "events") as? [[String: Any]] ?? []
+        try? loadModel()
         try? setupVision()
+        
         session.startRunning()
     }
 
@@ -139,15 +168,30 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             return
         }
     }
+    @IBOutlet weak var popupInfo: UIView!
     
+    @IBOutlet weak var stopDButton: UIButton!
+    @IBOutlet weak var startDButton: UIButton!
     func setupLayers() {
+        startDButton.backgroundColor = UIColor.link
+        stopDButton.backgroundColor = UIColor.systemRed
+        stopDButton.layer.cornerRadius = 5.0
+        startDButton.layer.cornerRadius = 5.0
+        popupInfo.backgroundColor = UIColor.black.withAlphaComponent(0.95)
+        popupInfo.layer.cornerRadius = 5.0
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         rootLayer = previewView.layer
         previewLayer.frame = rootLayer.bounds
         rootLayer.addSublayer(previewLayer)
         previewView.addSubview(table_data)
+        previewView.addSubview(table_data)
+        previewView.addSubview(popupInfo)
+        previewView.addSubview(stopDButton)
+        previewView.bringSubviewToFront(stopDButton)
+        previewView.bringSubviewToFront(startDButton)
         previewView.bringSubviewToFront(table_data)
+        previewView.bringSubviewToFront(popupInfo)
         table_data.frame = CGRect(x: 0, y: 0, width: previewView.frame.width, height: 200)
         
         inferenceTimeBounds = CGRect(x: rootLayer.frame.midX-95, y: rootLayer.frame.maxY-70, width: 200, height: 17)
@@ -155,7 +199,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         inferenceTimeLayer = createRectLayer(inferenceTimeBounds, [1,1,1,1])
         inferenceTimeLayer.cornerRadius = 7
         rootLayer.addSublayer(inferenceTimeLayer)
-        
+        inferenceTimeLayer.isHidden = true
         detectionLayer = CALayer()
         detectionLayer.bounds = CGRect(x: 0.0,
                                          y: 0.0,
@@ -175,29 +219,40 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         detectionLayer.position = CGPoint(x: rootLayer.bounds.midX, y: rootLayer.bounds.midY)
     }
     
-    func setupVision() throws {
+    func loadModel() throws {
         guard let modelURL = Bundle.main.url(forResource: "train14", withExtension: "mlmodelc") else {
             throw NSError(domain: "ViewController", code: -1, userInfo: [NSLocalizedDescriptionKey: "Model file is missing"])
         }
+        visionModel = try VNCoreMLModel(for: MLModel(contentsOf: modelURL))
+    }
+    
+    func setupVision() throws {
+        //guard let modelURL = Bundle.main.url(forResource: "train14", withExtension: "mlmodelc") else {
+        //    throw NSError(domain: "ViewController", code: -1, userInfo: [NSLocalizedDescriptionKey: "Model file is missing"])
+        //}
         
-        do {
-            let visionModel = try VNCoreMLModel(for: MLModel(contentsOf: modelURL))
-            let objectRecognition = VNCoreMLRequest(model: visionModel, completionHandler: { (request, error) in
-                DispatchQueue.main.async(execute: {
-                    if let results = request.results {
-                        self.drawResults(results)
-                        
-                        // Call the additional function on another thread
-                        DispatchQueue.global(qos: .userInitiated).async {
-                            self.processResults(results)
+        if let model = visionModel {
+            do {
+                let objectRecognition = VNCoreMLRequest(model: model, completionHandler: { (request, error) in
+                    DispatchQueue.main.async(execute: {
+                        if let results = request.results {
+                            self.drawResults(results)
+                            if self.isDetectionRunning {
+                                // Call the additional function on another thread
+                                DispatchQueue.global(qos: .userInitiated).async {
+                                    self.processResults(results)
+                                }
+                            }
                         }
-                    }
+                    })
                 })
-            })
-            self.requests = [objectRecognition]
-        } catch let error as NSError {
-            print("Model loading went wrong: \(error)")
+                self.requests = [objectRecognition]
+            } catch let error as NSError {
+                print("Model loading went wrong: \(error)")
+            }
         }
+        
+        
     }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -218,103 +273,122 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func processResults(_ results: [Any]) {
-        // Before detection
-        var closedEye:Bool = false
         
-        var yawnDetected:Bool = false
-        // Perform additional processing of the results on another thread
-        for observation in results where observation is VNRecognizedObjectObservation {
-            guard let objectObservation = observation as? VNRecognizedObjectObservation else {
-                continue
+        if !isFacingFront {
+            for observation in results where observation is VNRecognizedObjectObservation {
+                guard let objectObservation = observation as? VNRecognizedObjectObservation else {
+                    continue
+                }
+                let topLabelObservation = objectObservation.labels[0]
+                if topLabelObservation.identifier == "Facing_Front" {
+                    if (!isFacingFront){
+                        isFacingFront = true
+                    }
+                }
             }
             
-            // Detection with highest confidence
-            let topLabelObservation = objectObservation.labels[0]
+        } else {
+            // Before detection
+            var closedEye:Bool = false
             
-            if topLabelObservation.identifier != "Facing_Front" && lastNotFacingFrontTime == nil{
-                lastNotFacingFrontTime = Date()
+            var yawnDetected:Bool = false
+            // Perform additional processing of the results on another thread
+            for observation in results where observation is VNRecognizedObjectObservation {
+                guard let objectObservation = observation as? VNRecognizedObjectObservation else {
+                    continue
+                }
+                
+                // Detection with highest confidence
+                let topLabelObservation = objectObservation.labels[0]
+                
+                if topLabelObservation.identifier != "Facing_Front" && lastNotFacingFrontTime == nil{
+                    lastNotFacingFrontTime = Date()
+                }
+                
+                if topLabelObservation.identifier == "Facing_Front" {
+
+                    lastNotFacingFrontTime = nil
+                }
+
+
+                
+                // Check if the label is "Eye_Closed" for more than 1 second
+                if topLabelObservation.identifier == "Eye_Closed" {
+                    closedEye = true
+                    if topLabelObservation.confidence >= 0.8 {
+                        if lastEyeClosedTime == nil {
+                            lastEyeClosedTime = Date()
+                        } else {
+                            let timeSinceEyeClosed = Date().timeIntervalSince(lastEyeClosedTime!)
+    //                        print(timeSinceEyeClosed)
+                            if timeSinceEyeClosed >= 0.6 {
+                                lastEyeClosedTime = nil
+    //                            print("sound")
+                                playSound(resourceName: "closed_eyes")
+                                logEvent(eventName: "Eyes closed")
+                                print(timeSinceEyeClosed)
+                            }
+                        }
+                    } else {
+                        lastEyeClosedTime = nil
+                    }
+                }
+                
+                // Check if the label is "Eye_Closed" for more than 1 second
+                if topLabelObservation.identifier == "Mouth_Yawning" {
+                    
+                    yawnDetected = true
+                    if topLabelObservation.confidence >= 0.8 {
+                        
+                        if lastYawnTime == nil {
+                            lastYawnTime = Date()
+                        } else {
+                            let timeSinceYawn = Date().timeIntervalSince(lastYawnTime!)
+                            print(timeSinceYawn)
+                            if timeSinceYawn >= 2 && isYawning == false {
+                                isYawning = true
+                                lastYawnTime = nil
+                                yawnTimes = yawnTimes + 1
+                            }
+                        }
+                    } else {
+                        lastYawnTime = nil
+                        
+                    }
+                    
+                    
+                }
+            }
+            // After detection
+            if (!closedEye){
+    //            print("Not closedEye")
+                lastEyeClosedTime = nil
             }
             
-            if topLabelObservation.identifier == "Facing_Front" {
+            if (!yawnDetected){
+                lastYawnTime = nil
+                isYawning = false
+            }
+            
+            if yawnTimes != 0 && yawnTimes != 0 {
+                playSound(resourceName: "yawn")
+                yawnTimes = 0
+                lastYawnTime = nil
+                logEvent(eventName: "Yawn")
+                
+            }
+            
+            if let lastTime = lastNotFacingFrontTime, Date().timeIntervalSince(lastTime) >= 2 {
+                playSound(resourceName: "not_facing_front")
+                logEvent(eventName: "Not Facing Front")
                 lastNotFacingFrontTime = nil
             }
+        }
 
-
-            
-            // Check if the label is "Eye_Closed" for more than 1 second
-            if topLabelObservation.identifier == "Eye_Closed" {
-                closedEye = true
-                if topLabelObservation.confidence >= 0.8 {
-                    if lastEyeClosedTime == nil {
-                        lastEyeClosedTime = Date()
-                    } else {
-                        let timeSinceEyeClosed = Date().timeIntervalSince(lastEyeClosedTime!)
-//                        print(timeSinceEyeClosed)
-                        if timeSinceEyeClosed >= 0.6 {
-                            lastEyeClosedTime = nil
-//                            print("sound")
-                            playSound(resourceName: "closed_eyes")
-                            logEvent(eventName: "Eyes closed")
-                            print(timeSinceEyeClosed)
-                        }
-                    }
-                } else {
-                    lastEyeClosedTime = nil
-                }
-            }
-            
-            // Check if the label is "Eye_Closed" for more than 1 second
-            if topLabelObservation.identifier == "Mouth_Yawning" {
-                
-                yawnDetected = true
-                if topLabelObservation.confidence >= 0.8 {
-                    
-                    if lastYawnTime == nil {
-                        lastYawnTime = Date()
-                    } else {
-                        let timeSinceYawn = Date().timeIntervalSince(lastYawnTime!)
-                        print(timeSinceYawn)
-                        if timeSinceYawn >= 2 && isYawning == false {
-                            isYawning = true
-                            lastYawnTime = nil
-                            yawnTimes = yawnTimes + 1
-                        }
-                    }
-                } else {
-                    lastYawnTime = nil
-                    
-                }
-                
-                
-            }
-        }
-        // After detection
-        if (!closedEye){
-//            print("Not closedEye")
-            lastEyeClosedTime = nil
-        }
-        
-        if (!yawnDetected){
-            lastYawnTime = nil
-            isYawning = false
-        }
-        
-        if yawnTimes != 0 && yawnTimes != 0 {
-            playSound(resourceName: "yawn")
-            yawnTimes = 0
-            lastYawnTime = nil
-            logEvent(eventName: "Yawn")
-            
-        }
-        
-        if let lastTime = lastNotFacingFrontTime, Date().timeIntervalSince(lastTime) >= 2 {
-            playSound(resourceName: "not_facing_front")
-            logEvent(eventName: "Not Facing Front")
-            lastNotFacingFrontTime = nil
-        }
     }
     
     func playSound(resourceName: String) {
+
         let now = Date()
         let timeSinceLastPlay = now.timeIntervalSince(lastPlayTime)
 
@@ -324,19 +398,22 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             guard let path = Bundle.main.path(forResource: resourceName, ofType:"mp3") else {
                 return }
             let url = URL(fileURLWithPath: path)
-
+            
             do {
                 player = try AVAudioPlayer(contentsOf: url)
                 player?.play()
                 lastPlayTime = now // Update the last play time to the current time
             } catch let error {
                 print(error.localizedDescription)
+                
+                //            logEvent(eventName: resourceName)
             }
-//            logEvent(eventName: resourceName)
         }
+    
     }
     
     func drawResults(_ results: [Any]) {
+        var stillFacingFront: Bool = false
         CATransaction.begin()
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
         detectionLayer.sublayers = nil // Clear previous detections from detectionLayer
@@ -348,6 +425,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             
             // Detection with highest confidence
             let topLabelObservation = objectObservation.labels[0]
+            
+            if topLabelObservation.identifier == "Facing_Front" {
+                if (isDetectionRunning == false){
+                    isFacingFront = true
+                    startDButton.isEnabled = true
+                    stillFacingFront = true
+                }
+                
+            }
             
             // Rotate the bounding box into screen orientation
             let boundingBox = CGRect(origin: CGPoint(
@@ -365,6 +451,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             shapeLayer.addSublayer(textLayer)
             detectionLayer.addSublayer(shapeLayer)
         }
+        if isDetectionRunning == false && stillFacingFront == false {
+            print("Still facing front")
+            startDButton.isEnabled = false
+        }
+        //NSLog(String(format: "Inference time: %.1f ms - fps: %.1f", inferenceTime*1000, 1000/(inferenceTime*1000)))
         
         let formattedInferenceTimeString = NSMutableAttributedString(string: String(format: "Inference time: %.1f ms - fps: %.1f", inferenceTime*1000, 1000/(inferenceTime*1000)))
         
@@ -415,7 +506,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 self.scrollToBottom()
                 
             }
-        
         }
     }
     

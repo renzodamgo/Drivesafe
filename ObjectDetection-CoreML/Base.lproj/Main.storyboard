@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,8 +17,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XCI-UB-U3M">
+                                <rect key="frame" x="234" y="623" width="160" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="8JF-UV-mmi"/>
+                                    <constraint firstAttribute="height" constant="50" id="IFy-d3-0qa"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Stop Detection">
+                                    <color key="baseBackgroundColor" name="AccentColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="stopDetection:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3lE-jV-aHq"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYE-HN-rs3">
+                                <rect key="frame" x="20" y="623" width="160" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="NRn-bu-3l0"/>
+                                    <constraint firstAttribute="height" constant="50" id="P4i-mx-Rb4"/>
+                                </constraints>
+                                <buttonConfiguration key="configuration" style="filled" title="Start Detection">
+                                    <color key="baseBackgroundColor" name="AccentColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="startDetection:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kbw-YS-Akd"/>
+                                </connections>
+                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="DXY-BS-R4c">
-                                <rect key="frame" x="0.0" y="564" width="414" height="298"/>
+                                <rect key="frame" x="0.0" y="713" width="414" height="149"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="Da0-bt-hRk">
                                         <rect key="frame" x="0.0" y="50" width="414" height="43.5"/>
@@ -33,6 +60,27 @@
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="Gw2-Et-yZz"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qo1-0J-fSq">
+                                <rect key="frame" x="37" y="260" width="340" height="221"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="fyk-dl-g67">
+                                        <rect key="frame" x="19" y="8" width="303" height="193"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <string key="text">Welcome to DriveSafe
+To have the optimal results:
+
+1. Put your phone at the back of your steering wheel.
+2. Position the camera as center as posible looking at the front of your face. 3. To start detection, look front and press "Start Detection"</string>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="340" id="nwa-Ht-gWn"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -40,14 +88,26 @@
                             <bool key="isElement" value="YES"/>
                         </accessibility>
                         <constraints>
+                            <constraint firstItem="Qo1-0J-fSq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="37" id="6Qd-9u-dWO"/>
+                            <constraint firstItem="DXY-BS-R4c" firstAttribute="top" secondItem="EYE-HN-rs3" secondAttribute="bottom" constant="40" id="Aps-nN-Gl5"/>
                             <constraint firstItem="DXY-BS-R4c" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="AxV-7M-Mlx"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Qo1-0J-fSq" secondAttribute="trailing" constant="37" id="Btr-21-DOj"/>
+                            <constraint firstItem="EYE-HN-rs3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="FY2-Yt-H3j"/>
+                            <constraint firstItem="XCI-UB-U3M" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EYE-HN-rs3" secondAttribute="trailing" constant="8" symbolic="YES" id="JkS-yT-i0Y"/>
+                            <constraint firstItem="XCI-UB-U3M" firstAttribute="top" secondItem="Qo1-0J-fSq" secondAttribute="bottom" constant="142" id="RUF-bF-QC6"/>
                             <constraint firstItem="DXY-BS-R4c" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VVn-Wo-eFz"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XCI-UB-U3M" secondAttribute="trailing" constant="20" id="Xu2-Ua-vCI"/>
                             <constraint firstItem="DXY-BS-R4c" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="fne-8y-eqB"/>
-                            <constraint firstItem="DXY-BS-R4c" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="516" id="rvr-ag-EO8"/>
+                            <constraint firstItem="Qo1-0J-fSq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="212" id="hms-yl-GBy"/>
+                            <constraint firstItem="DXY-BS-R4c" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="665" id="rvr-ag-EO8"/>
+                            <constraint firstItem="DXY-BS-R4c" firstAttribute="top" secondItem="XCI-UB-U3M" secondAttribute="bottom" constant="40" id="vxm-rZ-B69"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="popupInfo" destination="Qo1-0J-fSq" id="lFa-7P-EQV"/>
                         <outlet property="previewView" destination="8bC-Xf-vdC" id="MKp-cQ-iBf"/>
+                        <outlet property="startDButton" destination="EYE-HN-rs3" id="o68-s3-tug"/>
+                        <outlet property="stopDButton" destination="XCI-UB-U3M" id="OOf-j0-Ylh"/>
                         <outlet property="table_data" destination="DXY-BS-R4c" id="Az4-BL-fhA"/>
                     </connections>
                 </viewController>
@@ -57,6 +117,15 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
