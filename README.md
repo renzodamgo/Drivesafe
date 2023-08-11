@@ -8,7 +8,7 @@
 
 ## 🎯 Introduction
 
-Drivesafe is a cutting-edge application designed to combat drowsiness and distracted driving using modern machine learning techniques. It emphasizes the integration of PyTorch with Apple's Core ML. Leveraging the power of the YOLOv8 object detection model, DriveSafe is meticulously trained on a distinctive dataset that amalgamates records from FORM and YawDD datasets. Its core mission is to detect drowsiness in real-time, fostering safer driving experiences.
+Drivesafe is an iOS application designed to combat drowsiness and distracted driving using modern machine learning techniques. It emphasizes the integration of PyTorch with Apple's Core ML. Leveraging the power of the YOLOv8 object detection model, DriveSafe is trained on a distinctive dataset that amalgamates records from FORM and YawDD datasets. Its core mission is to detect drowsiness in real-time, fostering safer driving experiences.
 
 ## 📜 Dataset Details
 
@@ -19,7 +19,7 @@ After fusing and manually annotating data from the mentioned sources, the compre
 
 ## 🚀 Model Information
 
-DriveSafe is empowered by the [YOLOv8](https://github.com/ultralytics/ultralytics) model, a renowned member of the YOLO family of object detection models developed using PyTorch. These models excel at detecting facial features in individual images, presenting bounding box predictions, classifications, and the accompanying confidence scores.
+DriveSafe is empowered by the [YOLOv8](https://github.com/ultralytics/ultralytics) model, the latest version of the YOLO family of object detection models developed using PyTorch. These models excel at detecting facial features in individual images, presenting bounding box predictions, classifications, and the accompanying confidence scores.
 
 ## 🛠 Prerequisites
 
