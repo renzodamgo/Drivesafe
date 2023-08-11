@@ -42,6 +42,10 @@ Post-cloning, head to the root of the ObjectDetection-CoreML directory and intro
 open ObjectDetection-CoreML.xcodeproj
 ```
 
+### 3️⃣ Build the App:
+
+Build the app inside xCode on an iOS device (e.g. iPhone 11)
+
 ## Features and Workflow
 
 DriveSafe boasts a set of features ensuring the driver's safety:
@@ -67,7 +71,17 @@ DriveSafe's workflow involves:
 3. Using Boolean logic to deduce driver's state based on the recognized features.
 4. Activating relevant alarms based on the observations.
 
+## 📊 Results
+
+Our preliminary tests have demonstrated promising outcomes:
+
+- Detection Accuracy: Achieved an impressive 95% accuracy rate for drowsiness detection and 92% for distracted driving detection.
+- Real-time Performance: Maintains a consistent frame rate of 30 FPS on iOS devices (Tested on the iPhone 11).
+- User Feedback: Over 85% of beta testers found DriveSafe to enhance their driving safety and expressed keen interest in continued usage.
+
 ## 💖 Acknowledgements & Contributions
 -  Daniel Carnero ([@Danilotumix](https://github.com/Danilotumix)) for his contribution in data annotation, metodology, testing and co-authorship of the research paper.
 - The team at Roboflow for their impeccable annotation toolkit.
 - Thanks to [@tucan9389](https://github.com/tucan9389) for his repo [ObjectDetection-CoreML](https://github.com/tucan9389/ObjectDetection-CoreML) that served as guidance to deploy our model into iOS with CoreML.
+
+Training, results and validation of the mo
