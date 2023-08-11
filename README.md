@@ -84,7 +84,9 @@ Our preliminary tests have demonstrated promising outcomes:
 - The team at Roboflow for their impeccable annotation toolkit.
 - Thanks to [@tucan9389](https://github.com/tucan9389) for his repo [ObjectDetection-CoreML](https://github.com/tucan9389/ObjectDetection-CoreML) that served as guidance to deploy our model into iOS with CoreML.
 
-## 📌 Additional Notes
-1. Explore the training, results, and validation of the YOLOV8 model in this Jupyter notebook.
-2. Link to the research paper will be provided upon publication.
-3. Once available, the thesis will be linked from the university repository.
+## 📌 Important Information
+
+- Explore the training, results, and validation of the YOLOV8 model in this [Jupyter notebook](https://github.com/renzodamgo/Drivesafe/blob/main/drivesafe_yolov8.ipynb).
+- A link to the related research paper will be shared once it's published.
+- Link to the research paper will be provided upon publication.
+- This project and its associated code are governed by the GNU General Public License v3.0. Consequently, any commercial adaptations must remain open source. Legal action will be taken against any infringement.
