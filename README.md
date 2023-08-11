@@ -1,38 +1,72 @@
-# Object Detection with PyTorch, Core ML, and Vision on iOS
+# Drivesafe
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/renzodamgo/ios-ObjectDetection-YOLO/main/results.jpeg" align="center" height="500">
+  <image src="https://raw.githubusercontent.com/renzodamgo/Drivesafe/main/results.gif" height="500">
+  <p> To see the full video go to: <a>UPC - Driverty video in youtube.</a></p>
 </p>
 
-## Introduction
-This demo app was built to showcase how to use PyTorch with Apple's Core ML. The app uses YOLOv8 tranied with the [FORM Dataset](https://zenodo.org/record/6695771).
+## 🎯 Introduction
 
-[YOLOv5](https://github.com/ultralytics/yolov5) is a family of object detection models built with PyTorch. The models enable detecting objects from single images, where the model output includes predictions of bounding boxes, the bounding box classification, and the confidence of the prediction.
+Drivesafe is a cutting-edge application designed to combat drowsiness and distracted driving using modern machine learning techniques. It emphasizes the integration of PyTorch with Apple's Core ML. Leveraging the power of the YOLOv8 object detection model, DriveSafe is meticulously trained on a distinctive dataset that amalgamates records from FORM and YawDD datasets. Its core mission is to detect drowsiness in real-time, fostering safer driving experiences.
 
+## 📜 Dataset Details
 
-## Prerequisites
+- **Base Dataset**: [FORM Dataset](https://zenodo.org/record/6695771)
+- **Additional Dataset**: [YawDD](https://ieee-dataport.org/open-access/yawdd-yawning-detection-dataset)
 
-* Python >=3.7 
-* Xcode
+After fusing and manually annotating data from the mentioned sources, the comprehensive [DRIVESAFE Dataset](https://app.roboflow.com/damian-lab/drivesafe/overview) emerges. With Roboflow's assistance, 780 images were annotated. Further preprocessing enhancements, including brightness adjustments and blur effects for data augmentation, expanded the dataset to a grand total of 1886 images.
 
-## Quick Start
+## 🚀 Model Information
 
-### 1. Prepare the model
+DriveSafe is empowered by the [YOLOv8](https://github.com/ultralytics/ultralytics) model, a renowned member of the YOLO family of object detection models developed using PyTorch. These models excel at detecting facial features in individual images, presenting bounding box predictions, classifications, and the accompanying confidence scores.
+
+## 🛠 Prerequisites
+
+- **Python**: Version 3.7 or higher
+- **Development Environment**: Xcode
+
+## 🌟 Quick Start
+
+### 1️⃣ Prepare the Model:
 
 Start by cloning the repository:
 
-```
+```bash
 git clone https://github.com/renzodamgo/ios-ObjectDetection-YOLO.git
+````
+### 2️⃣ Launch the App:
+
+Post-cloning, head to the root of the ObjectDetection-CoreML directory and introduce the project with:
+```bash
+open ObjectDetection-CoreML.xcodeproj
 ```
 
-### 2. Run the app
+## Features and Workflow
 
-Navigate to the root of the `ObjectDetection-CoreML` directory and open the project with:
+DriveSafe boasts a set of features ensuring the driver's safety:
 
-`open ObjectDetection-CoreML.xcodeproj`
+1. YOLOv8 Object Detection: Identifies:
+  - Eyes (Open or Closed)
+  - Head's orientation
+  - Yawning
 
-Select an iOS simulator or device on Xcode to run the app. The app will start outputting predictions and the current inference time:
+2. Alarm System: Alerts the driver based on real-time insights:
+  - Not looking ahead for over 4 seconds
+  - Eyes shut for more than 500 ms
+  - Yawning exceeding 2 seconds
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/renzodamgo/ios-ObjectDetection-YOLO/main/results.jpeg" align="center" height="500">
-</p>
+3. Audit Log: Retains a log when alarms are triggered, offering insights into potential patterns of distraction or drowsiness.
+
+For installation, ensure the smartphone camera is properly placed on the dashboard behind the steering wheel, capturing the driver's face without any blockages.
+
+DriveSafe's workflow involves:
+
+1. Streaming video data from the camera to the YOLOv8 model.
+2. Detecting and categorizing facial aspects.
+3. Using Boolean logic to deduce driver's state based on the recognized features.
+4. Activating relevant alarms based on the observations.
+
+## 💖 Acknowledgements & Contributions
+-  Daniel Carnero ([@Danilotumix](https://github.com/Danilotumix)) for his contribution in data annotation, metodology, testing and co-authorship of the research paper.
+- The team at Roboflow for their impeccable annotation toolkit.
+- Thanks to [@tucan9389](https://github.com/tucan9389) for his repo [ObjectDetection-CoreML](https://github.com/tucan9389/ObjectDetection-CoreML) that served as guidance to deploy our model into iOS with CoreML.
