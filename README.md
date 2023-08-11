@@ -1,8 +1,9 @@
-# Drivesafe
+# Drivesafe: Facial Recognition App for Detecting Driver Distraction or Fatigue with YOLOV8
 
 <p align="center">
-  <image src="https://raw.githubusercontent.com/renzodamgo/Drivesafe/main/results.gif" height="500">
-  <p> To see the full video go to: <a>UPC - Driverty video in youtube.</a></p>
+  <image src="https://raw.githubusercontent.com/renzodamgo/Drivesafe/main/results.gif" height="340">
+  <p> To see the full video go to: <a href="https://www.youtube.com/watch?v=0VVh7hIVVgw" target="_blank">DRIVERTY - Facial Recognition for Detecting Driver Distraction or Fatigue. </a>
+</p>
 </p>
 
 ## 🎯 Introduction
