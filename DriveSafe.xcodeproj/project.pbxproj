@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D0A8B022A594A350068D342 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0A8B012A594A350068D342 /* CustomTableViewCell.swift */; };
 		2D99EEE42A0429C900C7DD0A /* yawn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D99EEE32A0429C900C7DD0A /* yawn.mp3 */; };
 		2D99EEE62A0429CE00C7DD0A /* closed_eyes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D99EEE52A0429CE00C7DD0A /* closed_eyes.mp3 */; };
 		2DC2F0BE2A0325A700190B62 /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DC2F0BD2A0325A700190B62 /* alarm.mp3 */; };
 		2DC2F0C02A03291900190B62 /* alarm2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DC2F0BF2A03291900190B62 /* alarm2.mp3 */; };
-		2DD057282A22C30B00F6ED45 /* train12.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2DD057272A22C30B00F6ED45 /* train12.mlmodel */; };
 		2DEAC3E92A28135800D7C73A /* train14.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2DEAC3E82A28135800D7C73A /* train14.mlmodel */; };
 		C947E5002A13FAF300A9378C /* Drivesafe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C947E4FE2A13FAF300A9378C /* Drivesafe.xcdatamodeld */; };
 		C947E5022A141C9D00A9378C /* not_facing_front.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C947E5012A141C9D00A9378C /* not_facing_front.mp3 */; };
@@ -25,11 +25,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D0A8B012A594A350068D342 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		2D99EEE32A0429C900C7DD0A /* yawn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = yawn.mp3; sourceTree = "<group>"; };
 		2D99EEE52A0429CE00C7DD0A /* closed_eyes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = closed_eyes.mp3; sourceTree = "<group>"; };
 		2DC2F0BD2A0325A700190B62 /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
 		2DC2F0BF2A03291900190B62 /* alarm2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm2.mp3; sourceTree = "<group>"; };
-		2DD057272A22C30B00F6ED45 /* train12.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = train12.mlmodel; sourceTree = "<group>"; };
 		2DEAC3E82A28135800D7C73A /* train14.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = train14.mlmodel; sourceTree = "<group>"; };
 		C947E4FF2A13FAF300A9378C /* Drivesafe.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Drivesafe.xcdatamodel; sourceTree = "<group>"; };
 		C947E5012A141C9D00A9378C /* not_facing_front.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = not_facing_front.mp3; sourceTree = "<group>"; };
@@ -85,12 +85,12 @@
 				E956E0D128AB7928005A1871 /* Info.plist */,
 				E956E0DB28ACD391005A1871 /* Utils.swift */,
 				2DEAC3E82A28135800D7C73A /* train14.mlmodel */,
-				2DD057272A22C30B00F6ED45 /* train12.mlmodel */,
 				2DC2F0BD2A0325A700190B62 /* alarm.mp3 */,
 				2DC2F0BF2A03291900190B62 /* alarm2.mp3 */,
 				2D99EEE32A0429C900C7DD0A /* yawn.mp3 */,
 				2D99EEE52A0429CE00C7DD0A /* closed_eyes.mp3 */,
 				C947E5012A141C9D00A9378C /* not_facing_front.mp3 */,
+				2D0A8B012A594A350068D342 /* CustomTableViewCell.swift */,
 			);
 			path = "ObjectDetection-CoreML";
 			sourceTree = "<group>";
@@ -123,7 +123,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1340;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					E956E0BF28AB7926005A1871 = {
 						CreatedOnToolsVersion = 13.4.1;
@@ -173,8 +173,8 @@
 			files = (
 				E956E0DC28ACD391005A1871 /* Utils.swift in Sources */,
 				2DEAC3E92A28135800D7C73A /* train14.mlmodel in Sources */,
-				2DD057282A22C30B00F6ED45 /* train12.mlmodel in Sources */,
 				E956E0C828AB7926005A1871 /* ViewController.swift in Sources */,
+				2D0A8B022A594A350068D342 /* CustomTableViewCell.swift in Sources */,
 				C947E5002A13FAF300A9378C /* Drivesafe.xcdatamodeld in Sources */,
 				E956E0C428AB7926005A1871 /* AppDelegate.swift in Sources */,
 				E956E0C628AB7926005A1871 /* SceneDelegate.swift in Sources */,
@@ -240,6 +240,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -300,6 +301,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -323,18 +325,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZMYSVP22MX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ObjectDetection-CoreML/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = DriveSafe;
+				INFOPLIST_KEY_CFBundleDisplayName = Driverty;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This sample uses the camera to capture images of items for object recognition using YOLOv5.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -353,18 +357,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZMYSVP22MX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ObjectDetection-CoreML/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = DriveSafe;
+				INFOPLIST_KEY_CFBundleDisplayName = Driverty;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This sample uses the camera to capture images of items for object recognition using YOLOv5.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

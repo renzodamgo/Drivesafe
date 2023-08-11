@@ -10,18 +10,25 @@ import AVFoundation
 import Vision
 import CoreData
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UITableViewDataSource {
+class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         events = defaults.array(forKey: "events") as? [[String: Any]] ?? []
         return events.count
     }
     
+    @IBOutlet weak var lupa: UIImageView!
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = events[indexPath.row]["name"] as? String
+        let cell = logTable.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
+        cell.logName.text = events[indexPath.row]["name"] as? String
+        cell.logDate?.text = events[indexPath.row]["date"] as? String
         return cell
     }
     
+    @IBOutlet weak var notfound: UILabel!
+    
+    
+    
+    @IBOutlet weak var logTable: UITableView!
     var isDetectionRunning = false
     var isFacingFront = false
     var lastNotFacingFrontTime: Date?
@@ -29,35 +36,47 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     let defaults = UserDefaults.standard
     var events = [[String: Any]]()
     @IBAction func startDetection(_ sender: Any) {
-        print("Detection started")
+        if (!isDetectionRunning) {
+            print("Detection started")
+            isDetectionRunning = true
+            popupInfo.isHidden = true
+            inferenceTimeLayer.isHidden = false
+            
+            startDButton.isEnabled = true
+            startDButton.setTitle("Detener detección", for: .normal)
+            startDButton.backgroundColor = UIColor.systemRed
+        } else {
+            print("Detection stopped")
+            isFacingFront = false
+            //session.stopRunning()
+            isDetectionRunning = false
+            popupInfo.isHidden = true
+            detectionLayer.sublayers = nil // Clear previous detections from detectionLayer
+            inferenceTimeLayer.isHidden = false
+            
+            startDButton.isEnabled = true
+            startDButton.setTitle("Empezar detección", for: .normal)
+            
+            startDButton.backgroundColor = UIColor.systemGreen
+        }
         
-        //session.startRunning()
-        isDetectionRunning = true
-        popupInfo.isHidden = true
-        inferenceTimeLayer.isHidden = false
-        stopDButton.isEnabled = true
-        startDButton.isEnabled = false
         
     }
     
-    @IBAction func stopDetection(_ sender: Any) {
-        print("Detection stopped")
-        isFacingFront = false
-        //session.stopRunning()
-        isDetectionRunning = false
-        popupInfo.isHidden = false
-        detectionLayer.sublayers = nil // Clear previous detections from detectionLayer
-        inferenceTimeLayer.isHidden = true
-        stopDButton.isEnabled = false
-        startDButton.isEnabled = true
-    }
+   
     // Capture
     var bufferSize: CGSize = .zero
     var inferenceTime: CFTimeInterval  = 0;
     private let session = AVCaptureSession()
     
+    @IBOutlet weak var registro: UILabel!
+    @IBOutlet weak var driverty: UILabel!
     // UI/Layers
+    @IBOutlet weak var infraccion: UILabel!
+    @IBOutlet weak var hora: UILabel!
+    @IBOutlet weak var welcome: UILabel!
     @IBOutlet weak var previewView: UIView!
+    @IBOutlet weak var logs: UIView!
     @IBOutlet weak var table_data: UITableView!
     var rootLayer: CALayer! = nil
     private var previewLayer: AVCaptureVideoPreviewLayer! = nil
@@ -93,8 +112,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let fileName = "\(dateFormatter.string(from: Date()))benchmark.log"
         print(fileName)
         let logFilePath = (documentsDirectory as NSString).appendingPathComponent(fileName)
-        print(logFilePath)
         
+        print(logFilePath)
         freopen(logFilePath.cString(using: String.Encoding.ascii), "a+", stderr)
     }
 
@@ -102,13 +121,17 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     // Setup
     override func viewDidLoad() {
+        popupInfo.isHidden = true
+        table_data.delegate = self
         super.viewDidLoad()
         table_data.dataSource = self
+        logTable.dataSource = self
         setupCapture()
         setupOutput()
         setupLayers()
         createLogFile()
-        stopDButton.isEnabled = false
+        
+        
         startDButton.isEnabled = false
 
         
@@ -170,31 +193,53 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     @IBOutlet weak var popupInfo: UIView!
     
-    @IBOutlet weak var stopDButton: UIButton!
+    
     @IBOutlet weak var startDButton: UIButton!
     func setupLayers() {
-        startDButton.backgroundColor = UIColor.link
-        stopDButton.backgroundColor = UIColor.systemRed
-        stopDButton.layer.cornerRadius = 5.0
-        startDButton.layer.cornerRadius = 5.0
+        logTable.isHidden = true
+        startDButton.layer.cornerRadius = 25.0
+        
+        startDButton.backgroundColor = UIColor.systemGreen
+        logs.backgroundColor = UIColor.black
+        logs.layer.cornerRadius = 20.0
+        
         popupInfo.backgroundColor = UIColor.black.withAlphaComponent(0.95)
         popupInfo.layer.cornerRadius = 5.0
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         rootLayer = previewView.layer
+        table_data.layer.cornerRadius = 20
         previewLayer.frame = rootLayer.bounds
         rootLayer.addSublayer(previewLayer)
-        previewView.addSubview(table_data)
-        previewView.addSubview(table_data)
+        //previewView.addSubview(table_data)
+        hora.isHidden = true
+        infraccion.isHidden = true
+        
         previewView.addSubview(popupInfo)
-        previewView.addSubview(stopDButton)
-        previewView.bringSubviewToFront(stopDButton)
+        previewView.addSubview(welcome)
+        previewView.addSubview(lupa)
+        previewView.addSubview(hora)
+        previewView.addSubview(infraccion)
+        previewView.addSubview(notfound)
+        previewView.addSubview(driverty)
+        previewView.addSubview(logTable)
+        previewView.addSubview(logs)
+        previewView.addSubview(registro)
         previewView.bringSubviewToFront(startDButton)
-        previewView.bringSubviewToFront(table_data)
+        //previewView.bringSubviewToFront(table_data)
         previewView.bringSubviewToFront(popupInfo)
+        previewView.bringSubviewToFront(welcome)
+        previewView.bringSubviewToFront(driverty)
+        previewView.bringSubviewToFront(logs)
+        previewView.bringSubviewToFront(logTable)
+        previewView.bringSubviewToFront(notfound)
+        previewView.bringSubviewToFront(lupa)
+        previewView.bringSubviewToFront(hora)
+        previewView.bringSubviewToFront(infraccion)
+        previewView.bringSubviewToFront(registro)
         table_data.frame = CGRect(x: 0, y: 0, width: previewView.frame.width, height: 200)
         
-        inferenceTimeBounds = CGRect(x: rootLayer.frame.midX-95, y: rootLayer.frame.maxY-70, width: 200, height: 17)
+        inferenceTimeBounds = CGRect(x: rootLayer.frame.midX-95, y: rootLayer.frame.maxY-40, width: 200, height: 17)
         
         inferenceTimeLayer = createRectLayer(inferenceTimeBounds, [1,1,1,1])
         inferenceTimeLayer.cornerRadius = 7
@@ -247,8 +292,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     })
                 })
                 self.requests = [objectRecognition]
-            } catch let error as NSError {
-                print("Model loading went wrong: \(error)")
             }
         }
         
@@ -280,6 +323,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     continue
                 }
                 let topLabelObservation = objectObservation.labels[0]
+           
                 if topLabelObservation.identifier == "Facing_Front" {
                     if (!isFacingFront){
                         isFacingFront = true
@@ -325,7 +369,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                                 lastEyeClosedTime = nil
     //                            print("sound")
                                 playSound(resourceName: "closed_eyes")
-                                logEvent(eventName: "Eyes closed")
+                                logEvent(eventName: "Ojos cerrados")
                                 print(timeSinceEyeClosed)
                             }
                         }
@@ -374,13 +418,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 playSound(resourceName: "yawn")
                 yawnTimes = 0
                 lastYawnTime = nil
-                logEvent(eventName: "Yawn")
+                logEvent(eventName: "Bostezo")
                 
             }
             
             if let lastTime = lastNotFacingFrontTime, Date().timeIntervalSince(lastTime) >= 2 {
                 playSound(resourceName: "not_facing_front")
-                logEvent(eventName: "Not Facing Front")
+                logEvent(eventName: "No mira al frente")
                 lastNotFacingFrontTime = nil
             }
         }
@@ -391,8 +435,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
         let now = Date()
         let timeSinceLastPlay = now.timeIntervalSince(lastPlayTime)
-
-        // Check if there is no other audio playing and enough time has elapsed since the last play
         let audioSession = AVAudioSession.sharedInstance()
         if !audioSession.isOtherAudioPlaying && timeSinceLastPlay >= minimumDelay {
             guard let path = Bundle.main.path(forResource: resourceName, ofType:"mp3") else {
@@ -474,6 +516,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func logEvent(eventName: String) {
         DispatchQueue.main.async {
+            print(eventName)
+            self.lupa.isHidden = true
+            self.notfound.isHidden = true
+            self.logTable.isHidden = false
+            self.hora.isHidden = false
+            self.infraccion.isHidden = false
             let now = Date()
             let timeSinceLastLog = now.timeIntervalSince(self.lastLogTime)
             print(timeSinceLastLog,self.minimumDelay)
@@ -496,13 +544,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 print("Detected '\(eventName)' at \(dateString)")
                 
                 let event: [String: Any] = [
-                    "name": "\(eventName) at \(dateString)",
-                    "date": currentDate
+                    "name": eventName,
+                    "date": dateString
                 ]
                 NSLog("\(eventName) at \(dateFormatter.string(from: Date()))")
                 events.append(event)
                 defaults.set(events, forKey: "events")
                 self.table_data.reloadData()
+                self.logTable.reloadData()
+                
                 self.scrollToBottom()
                 
             }
@@ -510,11 +560,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func scrollToBottom() {
-            let lastRow = table_data.numberOfRows(inSection: 0) - 1
+            let lastRow = logTable.numberOfRows(inSection: 0) - 1
             let indexPath = IndexPath(row: lastRow, section: 0)
-            table_data.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            logTable.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
 
     
 }
-
